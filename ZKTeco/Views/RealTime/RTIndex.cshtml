@@ -1,0 +1,168 @@
+﻿@{
+    var opt = ViewBag.option;
+    var view = ViewBag.viewOption;
+}
+
+<div class="m-2">
+
+    <br />
+    <div class="row">
+        <div class="col-md-5 border border-success">
+            <h4 class="text-center header-color">Devices Information</h4>
+            <div id="success-alert" class="alert-success">@ViewBag.result</div>
+            <div id="error-alert" class="alert-success text-warning">@ViewBag.warning</div>
+            <button type="button" class="btn btn-primary @view " data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Add new
+            </button>
+            <button type="button" class="btn btn-outline-danger my-1 @view" id="update">
+                Disconnect
+            </button>
+            <button type="button" class="btn btn-outline-success my-1 @view " id="delete">
+                Connect
+            </button>
+
+
+
+
+
+           @*modal*@
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title header-color" id="exampleModalLabel">Device Information Entry</h5>
+                            <button type="button" class="Close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true"></span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form asp-action="ipSet" method="post">
+
+                                <div class="form-group">
+                                    <label class="control-label">IP Adress</label>
+                                    <input id="DeviceAdress" name="adress" type="text" value="192.168.1.201" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Location</label>
+                                    <input id="Location" type="text" name="location" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">InOut</label>
+                                    <input id="inout" type="text" name="inout" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Port</label>
+                                    <input id="port" type="text" name="port" value="4370" class="form-control" />
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">User Id</label>
+                                    <input id="User" type="text" name="name" value="admin" class="form-control" />
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Password</label>
+                                    <input id="Password" type="text" name="password" class="form-control" />
+                                </div>
+                                <button id="add" type="submit" class="btn btn-primary">Add IP Address</button>
+
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p id="deviceData"></p>
+        </div>
+        <div class="col-md-7 border border-success">
+            <h4 class="text-center header-color">Devices Data</h4>
+          
+            <div id="eventTable"></div>
+
+        </div>
+
+
+
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function startSpinnerExcel() {
+            document.getElementById('spinnerExcel').style.display = 'block';
+        }
+        function stopSpinnerExcel() {
+            document.getElementById('spinnerExcel').style.display = 'none';
+        };
+        var SelectedDevice;
+        var SearchData;
+        var table1;
+        var duration;
+        var DwonloadData = {};
+        var warning;
+        var formattedDateTime
+
+     
+        function deviceInfo() {
+           
+            $.ajax({
+                url: '@Url.Action("deviceInfo", "UserInfoManagement")',
+                method: "get",
+                dataType: 'Json',
+                success: function(data) {
+                    var tabledata = data;
+                    var table = new Tabulator("#deviceData", {
+                        height: "auto",
+                        width: "auto",
+
+                        layout: "fitDataStretch",
+                        selectable: true,
+                        data: tabledata,
+                        
+                        ///* autoColumns: true,*/ create columns from data field names
+                        columns: [
+                            {
+                                formatter: "rowSelection", titleFormatter: "rowSelection", hozAlign: "center", headerSort: false, cellClick: function(e, cell) {
+                                    cell.getRow().toggleSelect();
+                                }
+                            },
+
+                            { title: "Ip Address", field: "ipAddress", hozAlign: "center", sorter: "number", headerFilter: "input", editor: "input" },
+                            { title: "Location", field: "location", hozAlign: "center", sorter: "number", headerFilter: "input", editor: "input" },
+                            { title: "In Out", field: "inout", hozAlign: "center", sorter: "number", headerFilter: "input", editor: "list", editorParams: { values: { '1': "Out", '0': "In" } } },
+                            { title: "User Id", field: "zktuser", hozAlign: "center", sorter: "number", headerFilter: "input", editor: "input" },
+                            { title: "Password", field: "Zktpassword", hozAlign: "lcentereft", editor: "input" }
+                        ]
+                    })
+
+                    table.on("rowSelectionChanged", function(data, rows) {
+
+                        SelectedDevice = data;
+                    })
+                }
+            })
+        }
+        $(document).ready(function() {
+
+
+            //setInterval(function () {$("#eventTable").html += "Hello"}, 1000);
+            deviceInfo();
+                 
+
+
+        });
+
+        setInterval(interval, 1000);
+
+        function interval() {$("#eventTable").html += "Hello"}
+
+    </script>
+    <script src="~/lib/tabulator/js/tabulator.js"></script>
+   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.20/jspdf.plugin.autotable.min.js"></script>
+    <script type="text/javascript" src="https://oss.sheetjs.com/sheetjs/xlsx.full.min.js"></script>
+}

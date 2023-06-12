@@ -1,0 +1,18 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "tabulator@5.4.2",
+      "destination": "wwwroot/lib/tabulator/"
+    },
+    {
+      "library": "bootstrap@5.2.2",
+      "destination": "wwwroot/lib/bootstrap/"
+    },
+    {
+      "library": "toastr.js@2.1.4",
+      "destination": "wwwroot/lib/toastr.js/"
+    }
+  ]
+}

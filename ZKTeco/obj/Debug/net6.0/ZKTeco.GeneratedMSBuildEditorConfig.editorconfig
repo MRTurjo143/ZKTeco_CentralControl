@@ -1,0 +1,69 @@
+is_global = true
+build_property.TargetFramework = net6.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = ZKTeco
+build_property.RootNamespace = ZKTeco
+build_property.ProjectDir = D:\GTR\Official\ZKTeco\ZK_Downloader_Web\ZKTeco\
+build_property.RazorLangVersion = 6.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = true
+build_property.MSBuildProjectDirectory = D:\GTR\Official\ZKTeco\ZK_Downloader_Web\ZKTeco
+build_property._RazorSourceGeneratorDebug = 
+
+[D:/GTR/Official/ZKTeco/ZK_Downloader_Web/ZKTeco/Views/Block/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmxvY2tcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GTR/Official/ZKTeco/ZK_Downloader_Web/ZKTeco/Views/EventManagement/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXZlbnRNYW5hZ2VtZW50XEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GTR/Official/ZKTeco/ZK_Downloader_Web/ZKTeco/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GTR/Official/ZKTeco/ZK_Downloader_Web/ZKTeco/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GTR/Official/ZKTeco/ZK_Downloader_Web/ZKTeco/Views/Home/TestMethod.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxUZXN0TWV0aG9kLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GTR/Official/ZKTeco/ZK_Downloader_Web/ZKTeco/Views/RealTime/RtEvent.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVhbFRpbWVcUnRFdmVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GTR/Official/ZKTeco/ZK_Downloader_Web/ZKTeco/Views/RealTime/RTIndex.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVhbFRpbWVcUlRJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GTR/Official/ZKTeco/ZK_Downloader_Web/ZKTeco/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GTR/Official/ZKTeco/ZK_Downloader_Web/ZKTeco/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GTR/Official/ZKTeco/ZK_Downloader_Web/ZKTeco/Views/UserInfoManagement/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlckluZm9NYW5hZ2VtZW50XEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GTR/Official/ZKTeco/ZK_Downloader_Web/ZKTeco/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GTR/Official/ZKTeco/ZK_Downloader_Web/ZKTeco/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/GTR/Official/ZKTeco/ZK_Downloader_Web/ZKTeco/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-q7h8jru6b5

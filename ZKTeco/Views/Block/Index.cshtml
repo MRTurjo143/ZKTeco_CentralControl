@@ -1,0 +1,386 @@
+﻿@{
+    var opt = ViewBag.msg;
+    var view = ViewBag.viewOption;
+}
+
+<div class="m-2">
+    @*<div class="pad" style="padding:15px">
+    <progress class="progress" value="0" max="100">0%</progress>
+    <div class="alert alert-success" role="alert" style="display:none">Loading completed!</div>
+    </div>*@
+    <input id="msg" value="@opt" hidden/>
+    <div class="row">
+        <div class="col-md-4 d-flex d-none">
+            <label for="from" >From:</label>
+            <input type="datetime" id="from" name="from" class="form-control ml-1"  />
+        </div>
+
+        <h4 id="styletext" style="text-align:center"> upload From Excel File</h4>
+       <form id="myform" method="post" enctype="multipart/form-data" asp-action="UploadFromExcel" asp-controller="Block">
+        <div class="card-body">
+            <div class="input-group input-group w-50" style="margin:10px auto;">
+                <span class="input-group-btn input-group-prepend">
+                    <span class="btn btn-success rounded-0" onclick="$(this).parent().find('input[type=file]').click();">Browse</span>
+                    <input onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" style="display: none;" type="file" name="file">
+                </span>
+                <span class="form-control border border-success" style="background: #f2f2f2e6;"></span>
+                <input class="rounded-0 btn btn-success btn-sm mr-1" type="submit" id="btnUpload" value="Upload Files" />
+                
+                <span class="ms-lg-1 mt-1">
+                    <select class=" bg-warning " name="flag" id="flag">
+                        <option value=0>-please select-</option>
+                        <option value=1>Block</option>
+                        <option value=2>Unblock</option>
+                    </select>
+                </span>
+            </div>
+        </div>
+        </form>
+       
+
+
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-7 border border-success">
+            <h4 class="text-center header-color">Absent List</h4>
+            <div id="success-alert" class="alert-success">@ViewBag.result</div>
+
+            <p id=""></p>
+
+            <section class="border border-warning my-1" style="background-color: blanchedalmond;">
+                <div class="d-flex justify-content-between">
+                    <button type="button" id="Block" style="display:none" class="btn btn-outline-danger" onclick="startSpinnerBlock()">
+                        <span class="spinner-border spinner-border-sm my-1 mx-1"
+                              role="status" aria-hidden="true" style="display:none;" id="spinnerBlock"></span> Block To Device
+                    </button>
+                    <button type="button" id="AbsentDataDown" style="display:none" class="btn btn-success">
+                        download Absent data
+                    </button>
+                </div>
+          
+
+
+
+                Selected Data: <span id="absent-count" style="color:indigo"></span>
+                <div class="tabulator-table tabulator-row-handle-box" id="deviceData"></div>
+            </section>
+        </div>
+        <div class="col-md-5 border border-success">
+            <h4 class="text-center header-color">Blocked Employee List</h4>
+           
+
+            
+
+            <section class="border border-warning my-1" style="background-color: blanchedalmond;">
+                <div class="d-flex justify-content-between">
+                    <button type="button" id="UnBlock" style="display:none" class="btn btn-success" onclick="startSpinnerUnBlock()">
+                        <span class="spinner-border spinner-border-sm my-1 mx-1"
+                              role="status" aria-hidden="true" style="display:none;" id="spinnerUnBlock"></span> UnBlock from Device
+                    </button>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button type="button" id="BlockedDataDown" style="display:none" class="btn btn-success" >
+                         UnBlock from Device
+                    </button>
+                </div>
+
+
+
+                Selected Data: <span id="block-count" style="color:indigo"></span>
+                <div class="tabulator-table tabulator-row-handle-box" id="BlockTable"></div>
+            </section>
+        </div>
+
+
+
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function startSpinnerBlock() {
+            document.getElementById('spinnerBlock').style.display = 'block';
+        }
+        function stopSpinnerBlock() {
+            document.getElementById('spinnerBlock').style.display = 'none';
+        };
+
+        function startSpinnerUnBlock() {
+            document.getElementById('spinnerUnBlock').style.display = 'block';
+        }
+        function stopSpinnerUnBlock() {
+            document.getElementById('spinnerUnBlock').style.display = 'none';
+        };
+        var SelectedDevice;
+        var SearchData;
+        var table1;
+        var SelectedCard = [];
+        var formattedDateTime
+
+     
+        
+        $(document).ready(function () {
+            var msg=document.getElementById('msg').value;
+            if(msg!="" ){
+                toastr.info(msg,{
+                    timeOut: 5000
+                });
+            }
+            else{
+                toastr.info(msg);
+            }
+            var d = new Date();
+            let year = d.getFullYear();
+            let month = d.getMonth().toString().length === 1 ? '0' + (d.getMonth() + 1).toString() : d.getMonth() + 1;
+            let Pdate = d.getDate().toString().length === 1 ? '0' + (d.getDate()).toString() : d.getDate();
+            let date = d.getDate().toString().length === 1 ? '0' + (d.getDate()).toString() : d.getDate();
+            let hours = d.getHours().toString().length === 1 ? '0' + d.getHours().toString() : d.getHours();
+            let minutes = d.getMinutes().toString().length === 1 ? '0' + d.getMinutes().toString() : d.getMinutes();
+            let seconds = d.getSeconds().toString().length === 1 ? '0' + d.getSeconds().toString() : d.getSeconds();
+
+            var formattedDateTime = year + '-' + month + '-' + date + 'T' + hours + ':' + minutes + ':' + seconds;
+
+
+            if (Pdate <= 9) {
+                var startDate = month + '-' + Pdate + '-' + year;
+            }
+            else {
+                var startDate = month + '-' + Pdate + '-' + year;
+            }
+
+            document.getElementById("from").defaultValue = startDate;
+
+
+
+            //document.getElementById("to").defaultValue = formattedDateTime;
+
+
+            AbsentInfo();
+            BlockedInfo();
+
+         });
+
+        function AbsentInfo() {
+            //toastr.info("loading...");
+            var fdate = document.getElementById("from").value
+            $.ajax({
+                url: '@Url.Action("AbsentList", "Block")',
+                method: "get",
+                dataType: 'Json',
+                data: { processDate: fdate },
+                success: function (result) {
+                    var tabledata = result;
+                    var table = new Tabulator("#deviceData", {
+                        height: "auto",
+                        width: "auto",
+
+                        layout: "fitDataStretch",
+                        selectable: true,
+                        
+                        pagination: true,
+                        paginationSize: 10,
+                        paginationSizeSelector: [10, 20, 50, 100],
+                        data: tabledata, //assign data to table
+                        /* autoColumns: true,*/ //create columns from data field names
+                        columns: [
+                            {
+                                formatter: "rowSelection", titleFormatter: "rowSelection", hozAlign: "center", headerSort: false, cellClick: function (e, cell) {
+                                    cell.getRow().toggleSelect();
+                                }
+                            },
+
+                            { title: "Emp_Code", field: "empCode", hozAlign: "center", headerFilter: "input", editor: "input" },
+                            { title: "Name", field: "empName", hozAlign: "center", headerFilter: "input",},
+                            { title: "Absent", field: "userGroup", hozAlign: "center", headerFilter: "input",},
+                            { title: "Designation", field: "desigName", hozAlign: "center", headerFilter: "input", },
+                            { title: "Department", field: "deptName", hozAlign: "center", headerFilter: "input" },
+                            { title: "Section", field: "sectName", hozAlign: "center", headerFilter: "input",},
+                            
+                        ]
+                    })
+
+                    table.on("rowSelectionChanged", function (data, rows) {
+                        document.getElementById("absent-count").innerHTML = data.length;
+                        Selecteddata = data;
+                        SelectedCard = [];
+                        for (const { empCode, empName } of data) {
+
+                            SelectedCard.push({ empCode, empName });
+                        }
+
+                        if (data.length > 0) {
+
+                            document.getElementById("Block").style.display = "block";
+                            //document.getElementById("DeleteFromDB").style.display = "block";
+                            //document.getElementById("downloadImg").style.display = "block";
+
+                        }
+                        else {
+                            document.getElementById("Block").style.display = "none";
+                            //document.getElementById("DeleteFromDB").style.display = "none";
+                            //document.getElementById("downloadImg").style.display = "none";
+
+                        }
+                    })
+                    document.getElementById("AbsentDataDown").style.display = "block";
+                    $("#AbsentDataDown").click(function(){
+                    table.download("xlsx", "Absent_List.xlsx", { sheetName: "Absent" })
+                    })
+                }
+            })
+        }
+
+        
+        function BlockedInfo() {
+           
+            $.ajax({
+                url: '@Url.Action("BlockedUserList", "Block")',
+                method: "get",
+                dataType: 'Json',
+           
+                success: function (result) {
+                    var tabledata = result;
+                    var table = new Tabulator("#BlockTable", {
+                        height: "auto",
+                        width: "auto",
+
+                        layout: "fitDataStretch",
+                        selectable: true,
+                        
+                        pagination: true,
+                        paginationSize: 10,
+                        paginationSizeSelector: [10, 20, 50, 100],
+                        data: tabledata, //assign data to table
+                        /* autoColumns: true,*/ //create columns from data field names
+                        columns: [
+                            {
+                                formatter: "rowSelection", titleFormatter: "rowSelection", hozAlign: "center", headerSort: false, cellClick: function (e, cell) {
+                                    cell.getRow().toggleSelect();
+                                }
+                            },
+
+                            { title: "Emp_Code", field: "empCode", hozAlign: "center", headerFilter: "input", editor: "input" },
+                            { title: "Name", field: "empName", hozAlign: "center", headerFilter: "input",},
+                            { title: "Blocked Date", field: "blockdate", hozAlign: "center", headerFilter: "input", },
+                            
+                            
+                        ]
+                    })
+
+                    table.on("rowSelectionChanged", function (data, rows) {
+                        document.getElementById("block-count").innerHTML = data.length;
+                        Selecteddata = data;
+                        SelectedCard = [];
+                        for (const { empCode, empName } of data) {
+
+                            SelectedCard.push({ empCode, empName });
+                        }
+
+                        if (data.length > 0) {
+
+                            document.getElementById("UnBlock").style.display = "block";
+                            //document.getElementById("DeleteFromDB").style.display = "block";
+                            //document.getElementById("downloadImg").style.display = "block";
+
+                        }
+                        else {
+                            document.getElementById("UnBlock").style.display = "none";
+                            //document.getElementById("DeleteFromDB").style.display = "none";
+                            //document.getElementById("downloadImg").style.display = "none";
+
+                        }
+                    })
+                    table.download("xlsx", "BlockedList.xlsx", { sheetName: "Block" })
+                }
+            })
+        }
+
+        $('#Block').click(function () {
+            if (SelectedCard != "") {
+                $.ajax({
+                    url: "@Url.Action("BlockUser","Block")",
+                    method: "post",
+                    data: {
+                     
+                        SelectedData: SelectedCard,
+
+                    },
+                    dataType: 'Json',
+                    success: function (res) {
+                        alert(res.data);
+                        stopSpinnerBlock();
+                        alert(res.error)
+                        BlockedInfo();
+                    }
+
+                })
+            }
+            else {
+                alert("Select Device and Then Try!");
+                stopSpinnerBlock()
+            }
+        });
+
+        $('#UnBlock').click(function () {
+            if (SelectedCard != "") {
+                $.ajax({
+                    url: "@Url.Action("UnBlockUser","Block")",
+                    method: "post",
+                    data: {
+
+                        SelectedData: SelectedCard,
+
+                    },
+                    dataType: 'Json',
+                    success: function (res) {
+                         alert(res.data);
+                        stopSpinnerBlock();
+                        alert(res.error)
+                        BlockedInfo();
+                    }
+
+                })
+            }
+            else {
+                alert("Select Device and Then Try!");
+                stopSpinnerUnBlock();
+            }
+        });
+
+
+        //$('#btnUpload').click(function () {
+        //    var fdate = document.getElementById("from").value
+
+        //        $.ajax({
+        //        url: "@Url.Action("UploadFromExcel","Block")",
+        //            method: "post",
+        //            data: {
+
+        //                SelectedData: SelectedCard,
+
+        //            },
+        //            dataType: 'Json',
+        //            success: function (res) {
+        //                alert(res.data);
+        //                stopSpinnerBlock();
+        //                alert(res.error)
+        //                BlockedInfo();
+        //            }
+
+        //        })
+            
+           
+        //});
+
+
+
+
+
+    </script>
+    <script src="~/lib/tabulator/js/tabulator.js"></script>
+ 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.20/jspdf.plugin.autotable.min.js"></script>
+    <script type="text/javascript" src="https://oss.sheetjs.com/sheetjs/xlsx.full.min.js"></script>
+}
